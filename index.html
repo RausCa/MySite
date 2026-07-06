@@ -10,14 +10,14 @@
     />
     <style>
       :root {
-        --bg: #07111f;
-        --panel: rgba(255, 255, 255, 0.09);
-        --panel-strong: rgba(255, 255, 255, 0.14);
-        --text: #f4f7fb;
-        --muted: #b8c4d9;
-        --accent: #7ed6c1;
-        --accent-2: #8aa7ff;
-        --border: rgba(255, 255, 255, 0.16);
+        --bg: #fffaf6;
+        --panel: rgba(255, 240, 228, 0.75);
+        --panel-strong: rgba(255, 235, 218, 0.95);
+        --text: #1f140f;
+        --muted: #7a5a46;
+        --accent: #ff7a3d;
+        --accent-2: #ff5b2e;
+        --border: rgba(255, 122, 61, 0.18);
       }
 
       * { box-sizing: border-box; }
@@ -27,8 +27,8 @@
         font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
         color: var(--text);
         background:
-          radial-gradient(circle at top left, rgba(126, 214, 193, 0.2), transparent 28%),
-          radial-gradient(circle at right, rgba(138, 167, 255, 0.22), transparent 30%),
+          radial-gradient(circle at top left, rgba(255, 122, 61, 0.14), transparent 24%),
+          radial-gradient(circle at right, rgba(255, 91, 46, 0.08), transparent 30%),
           var(--bg);
         min-height: 100vh;
       }
@@ -43,7 +43,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1.2rem 0;
+        padding: 1.3rem 0 1.1rem;
       }
       .nav .brand {
         font-weight: 700;
@@ -59,10 +59,10 @@
       .nav .links a:hover { color: var(--text); }
 
       .hero {
-        padding: 4rem 0 3rem;
+        padding: 5.5rem 0 4.2rem;
         display: grid;
-        grid-template-columns: 1.2fr 0.8fr;
-        gap: 2rem;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 2.4rem;
         align-items: center;
       }
       .eyebrow {
@@ -73,24 +73,26 @@
         color: var(--accent);
         font-size: 0.8rem;
         margin-bottom: 1rem;
-        background: rgba(126, 214, 193, 0.1);
+        background: rgba(255, 122, 61, 0.1);
       }
       h1 {
-        font-size: clamp(2.4rem, 5vw, 4rem);
-        line-height: 1.04;
-        margin: 0 0 1rem;
+        font-size: clamp(2.2rem, 4.4vw, 3.3rem);
+        line-height: 1.05;
+        margin: 0 0 0.8rem;
+        max-width: 720px;
       }
       .lead {
-        font-size: 1.05rem;
+        font-size: 1rem;
         color: var(--muted);
         line-height: 1.7;
-        max-width: 650px;
+        max-width: 560px;
+        margin: 0;
       }
       .cta-row {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.9rem;
-        margin-top: 1.5rem;
+        gap: 0.8rem;
+        margin-top: 1.2rem;
       }
       .btn {
         padding: 0.9rem 1.2rem;
@@ -111,26 +113,27 @@
       }
 
       .card {
-        background: linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(255, 240, 228, 0.8));
         border: 1px solid var(--border);
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+        box-shadow: 0 14px 40px rgba(255, 122, 61, 0.12);
         border-radius: 24px;
-        padding: 1.4rem;
+        padding: 1.2rem;
         backdrop-filter: blur(16px);
       }
       .quote {
-        font-size: 1.1rem;
-        line-height: 1.7;
+        font-size: 1rem;
+        line-height: 1.6;
         color: var(--text);
+        margin: 0;
       }
       .quote strong { color: var(--accent); }
       .mini-list {
-        margin-top: 1rem;
+        margin-top: 0.8rem;
         padding: 0;
         list-style: none;
         color: var(--muted);
       }
-      .mini-list li { margin: 0.45rem 0; }
+      .mini-list li { margin: 0.35rem 0; }
       .mini-list li::before {
         content: "•";
         color: var(--accent);
@@ -138,7 +141,7 @@
       }
 
       section {
-        padding: 1.4rem 0 2.4rem;
+        padding: 1.6rem 0 2.8rem;
       }
       .section-title {
         font-size: 1.5rem;
@@ -158,7 +161,7 @@
         background: var(--panel);
         border: 1px solid var(--border);
         border-radius: 18px;
-        padding: 1.1rem;
+        padding: 1.2rem;
       }
       .feature h3 { margin-top: 0; margin-bottom: 0.5rem; }
       .feature p { color: var(--muted); line-height: 1.6; margin: 0; }
@@ -181,7 +184,7 @@
       }
 
       footer {
-        padding: 2rem 0 3rem;
+        padding: 2.2rem 0 3.2rem;
         color: var(--muted);
         text-align: center;
       }
@@ -205,27 +208,25 @@
 
       <header class="hero" id="top">
         <div>
-          <div class="eyebrow">CX strategist • journey design • growth</div>
-          <h1>I help brands create customer experiences that feel effortless and memorable.</h1>
+          <div class="eyebrow">CX strategist • journey design</div>
+          <h1>Designing calm, confident customer experiences.</h1>
           <p class="lead">
-            I’m Ross, a strategist focused on turning customer insight into clear experiences,
-            smarter service, and measurable business growth.
+            I help brands turn complexity into clarity with strategy that feels simple, human, and useful.
           </p>
           <div class="cta-row">
-            <a class="btn btn-primary" href="#services">Explore my work</a>
-            <a class="btn btn-secondary" href="#contact">Let’s connect</a>
+            <a class="btn btn-primary" href="#services">See what I do</a>
+            <a class="btn btn-secondary" href="#contact">Get in touch</a>
           </div>
         </div>
 
         <div class="card">
           <p class="quote">
-            “Great customer experience is not a touchpoint checklist. It is a deliberate system
-            shaped by empathy, clarity, and momentum.”
+            “The strongest experiences are shaped by empathy, precision, and a clear point of view.”
           </p>
           <ul class="mini-list">
-            <li>Customer journey mapping</li>
-            <li>Voice of customer insights</li>
-            <li>Experience strategy and service design</li>
+            <li>Journey strategy</li>
+            <li>Customer insight</li>
+            <li>Experience design</li>
           </ul>
         </div>
       </header>
