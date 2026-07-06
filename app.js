@@ -56,8 +56,8 @@ const weatherLabel = {
 
 function showFallback(message) {
   weatherLocation.textContent = message;
-  weatherTemp.textContent = "--°F";
   weatherCondition.textContent = "Try another location";
+  weatherTemp.textContent = "--°F";
   weatherIcon.textContent = "🌦️";
   weatherPrecip.textContent = "Precip: --%";
 }
@@ -76,13 +76,13 @@ function fetchWeatherByCity(city) {
   weatherTemp.textContent = "--°F";
   weatherPrecip.textContent = "Precip: --%";
 
-  fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`)
+  fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en`)
     .then((response) => response.json())
     .then((geoData) => {
       const place = geoData.results?.[0];
       if (!place) {
         showFallback("Location not found");
-        return;
+        return Promise.reject(new Error("No place found"));
       }
 
       const placeName = `${place.name}${place.admin1 ? `, ${place.admin1}` : ""}`;
