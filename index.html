@@ -142,6 +142,41 @@
         font-size: 0.82rem;
         margin-bottom: 0.7rem;
       }
+      .weather-actions {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .weather-form {
+        display: flex;
+        gap: 0.45rem;
+        margin-top: 0.6rem;
+        flex-wrap: wrap;
+      }
+      .weather-input {
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        padding: 0.45rem 0.7rem;
+        font-size: 0.85rem;
+        min-width: 180px;
+        background: rgba(255,255,255,0.85);
+        color: var(--text);
+      }
+      .weather-button {
+        border: 1px solid var(--border);
+        background: var(--panel);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 0.45rem 0.7rem;
+        font-size: 0.78rem;
+        cursor: pointer;
+      }
+      .weather-button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
       .weather-main {
         display: flex;
         align-items: center;
@@ -286,18 +321,22 @@
           <div class="weather-card" id="weather-card">
             <div class="weather-top">
               <span>Live weather</span>
-              <span id="weather-location">Using browser location…</span>
+              <span id="weather-location">Enter a city</span>
             </div>
             <div class="weather-main">
               <div class="weather-icon" id="weather-icon">☀️</div>
               <div>
                 <div class="weather-temp" id="weather-temp">--°F</div>
-                <div class="weather-condition" id="weather-condition">Checking conditions…</div>
+                <div class="weather-condition" id="weather-condition">Add your location to see the forecast</div>
                 <div class="weather-meta">
                   <span id="weather-precip">Precip: --%</span>
                 </div>
               </div>
             </div>
+            <form class="weather-form" id="weather-form">
+              <input class="weather-input" id="weather-input" type="text" placeholder="Enter city or town" />
+              <button class="weather-button" type="submit">Show weather</button>
+            </form>
           </div>
         </div>
       </header>
@@ -308,6 +347,8 @@
         const weatherCondition = document.getElementById("weather-condition");
         const weatherIcon = document.getElementById("weather-icon");
         const weatherPrecip = document.getElementById("weather-precip");
+        const weatherForm = document.getElementById("weather-form");
+        const weatherInput = document.getElementById("weather-input");
 
         const weatherEmoji = {
           0: "☀️",
@@ -360,48 +401,69 @@
         function showFallback(message) {
           weatherLocation.textContent = message;
           weatherTemp.textContent = "--°F";
-          weatherCondition.textContent = "Enable location to see your weather";
+          weatherCondition.textContent = "Try another location";
           weatherIcon.textContent = "🌦️";
           weatherPrecip.textContent = "Precip: --%";
         }
 
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const lat = position.coords.latitude;
-              const lon = position.coords.longitude;
-              weatherLocation.textContent = "Using browser location…";
+        function saveLocation(location) {
+          localStorage.setItem("weatherLocation", location);
+        }
 
-              fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&count=1`)
-                .then((response) => response.json())
-                .then((geoData) => {
-                  const place = geoData.results?.[0];
-                  const placeName = place?.name || place?.city || place?.town || place?.village || "Your area";
-                  weatherLocation.textContent = placeName;
+        function loadLocation() {
+          return localStorage.getItem("weatherLocation") || "";
+        }
 
-                  return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=precipitation_probability_mean&temperature_unit=fahrenheit&wind_speed_unit=mph&forecast_days=1&timezone=auto`);
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                  const current = data.current;
-                  const code = current?.weather_code;
-                  const precipitation = data.daily?.precipitation_probability_mean?.[0] ?? 0;
-                  weatherTemp.textContent = `${Math.round(current?.temperature_2m ?? 0)}°F`;
-                  weatherCondition.textContent = weatherLabel[code] || "Current conditions";
-                  weatherIcon.textContent = weatherEmoji[code] || "🌦️";
-                  weatherPrecip.textContent = `Precip: ${Math.round(precipitation)}%`;
-                })
-                .catch(() => {
-                  showFallback("Location available");
-                });
-            },
-            () => {
-              showFallback("Location blocked");
-            },
-            { enableHighAccuracy: true, timeout: 10000 }
-          );
-        } else {
-          showFallback("Geolocation unavailable");
+        function fetchWeatherByCity(city) {
+          weatherLocation.textContent = "Finding weather…";
+          weatherCondition.textContent = "Looking up forecast…";
+          weatherTemp.textContent = "--°F";
+          weatherPrecip.textContent = "Precip: --%";
+
+          fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`)
+            .then((response) => response.json())
+            .then((geoData) => {
+              const place = geoData.results?.[0];
+              if (!place) {
+                showFallback("Location not found");
+                return;
+              }
+
+              const placeName = `${place.name}${place.admin1 ? `, ${place.admin1}` : ""}`;
+              weatherLocation.textContent = placeName;
+              saveLocation(placeName);
+
+              return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${place.latitude}&longitude=${place.longitude}&current=temperature_2m,weather_code&daily=precipitation_probability_mean&temperature_unit=fahrenheit&wind_speed_unit=mph&forecast_days=1&timezone=auto`);
+            })
+            .then((response) => response.json())
+            .then((data) => {
+              const current = data.current;
+              const code = current?.weather_code;
+              const precipitation = data.daily?.precipitation_probability_mean?.[0] ?? 0;
+              weatherTemp.textContent = `${Math.round(current?.temperature_2m ?? 0)}°F`;
+              weatherCondition.textContent = weatherLabel[code] || "Current conditions";
+              weatherIcon.textContent = weatherEmoji[code] || "🌦️";
+              weatherPrecip.textContent = `Precip: ${Math.round(precipitation)}%`;
+            })
+            .catch(() => {
+              showFallback("Weather unavailable");
+            });
+        }
+
+        weatherForm.addEventListener("submit", (event) => {
+          event.preventDefault();
+          const value = weatherInput.value.trim();
+          if (!value) {
+            showFallback("Enter a location");
+            return;
+          }
+          fetchWeatherByCity(value);
+        });
+
+        const savedLocation = loadLocation();
+        if (savedLocation) {
+          weatherInput.value = savedLocation;
+          fetchWeatherByCity(savedLocation);
         }
       </script>
 
