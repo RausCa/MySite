@@ -112,6 +112,11 @@
         background: var(--panel);
       }
 
+      .hero-panel {
+        display: grid;
+        gap: 1rem;
+      }
+
       .card {
         background: linear-gradient(145deg, rgba(255, 255, 255, 0.92), rgba(255, 240, 228, 0.8));
         border: 1px solid var(--border);
@@ -119,6 +124,53 @@
         border-radius: 24px;
         padding: 1.2rem;
         backdrop-filter: blur(16px);
+      }
+
+      .weather-card {
+        background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(255, 244, 233, 0.9));
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 1.1rem 1.2rem;
+        box-shadow: 0 14px 40px rgba(255, 122, 61, 0.1);
+      }
+      .weather-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--muted);
+        font-size: 0.82rem;
+        margin-bottom: 0.7rem;
+      }
+      .weather-main {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+      }
+      .weather-icon {
+        font-size: 2rem;
+        line-height: 1;
+      }
+      .weather-temp {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .weather-condition {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+      .weather-meta {
+        margin-top: 0.6rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+        display: flex;
+        gap: 0.8rem;
+        flex-wrap: wrap;
+      }
+      .weather-precip {
+        color: var(--accent);
+        font-weight: 600;
       }
       .quote {
         font-size: 1rem;
@@ -219,17 +271,139 @@
           </div>
         </div>
 
-        <div class="card">
-          <p class="quote">
-            “The strongest experiences are shaped by empathy, precision, and a clear point of view.”
-          </p>
-          <ul class="mini-list">
-            <li>Journey strategy</li>
-            <li>Customer insight</li>
-            <li>Experience design</li>
-          </ul>
+        <div class="hero-panel">
+          <div class="card">
+            <p class="quote">
+              “The strongest experiences are shaped by empathy, precision, and a clear point of view.”
+            </p>
+            <ul class="mini-list">
+              <li>Journey strategy</li>
+              <li>Customer insight</li>
+              <li>Experience design</li>
+            </ul>
+          </div>
+
+          <div class="weather-card" id="weather-card">
+            <div class="weather-top">
+              <span>Live weather</span>
+              <span id="weather-location">Using browser location…</span>
+            </div>
+            <div class="weather-main">
+              <div class="weather-icon" id="weather-icon">☀️</div>
+              <div>
+                <div class="weather-temp" id="weather-temp">--°F</div>
+                <div class="weather-condition" id="weather-condition">Checking conditions…</div>
+                <div class="weather-meta">
+                  <span id="weather-precip">Precip: --%</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
+
+      <script>
+        const weatherLocation = document.getElementById("weather-location");
+        const weatherTemp = document.getElementById("weather-temp");
+        const weatherCondition = document.getElementById("weather-condition");
+        const weatherIcon = document.getElementById("weather-icon");
+        const weatherPrecip = document.getElementById("weather-precip");
+
+        const weatherEmoji = {
+          0: "☀️",
+          1: "🌤️",
+          2: "⛅",
+          3: "☁️",
+          45: "🌫️",
+          48: "🌫️",
+          51: "🌦️",
+          53: "🌦️",
+          55: "🌦️",
+          61: "🌧️",
+          63: "🌧️",
+          65: "🌧️",
+          71: "🌨️",
+          73: "🌨️",
+          75: "🌨️",
+          77: "🌨️",
+          85: "🌨️",
+          86: "🌨️",
+          95: "⛈️",
+          96: "⛈️",
+          99: "⛈️"
+        };
+
+        const weatherLabel = {
+          0: "Clear sky",
+          1: "Mostly clear",
+          2: "Partly cloudy",
+          3: "Cloudy",
+          45: "Fog",
+          48: "Depositing rime fog",
+          51: "Light drizzle",
+          53: "Drizzle",
+          55: "Dense drizzle",
+          61: "Light rain",
+          63: "Rain",
+          65: "Heavy rain",
+          71: "Light snow",
+          73: "Snow",
+          75: "Heavy snow",
+          77: "Snow grains",
+          85: "Snow showers",
+          86: "Heavy snow showers",
+          95: "Thunderstorm",
+          96: "Thunderstorm with hail",
+          99: "Severe thunderstorm"
+        };
+
+        function showFallback(message) {
+          weatherLocation.textContent = message;
+          weatherTemp.textContent = "--°F";
+          weatherCondition.textContent = "Enable location to see your weather";
+          weatherIcon.textContent = "🌦️";
+          weatherPrecip.textContent = "Precip: --%";
+        }
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const lat = position.coords.latitude;
+              const lon = position.coords.longitude;
+              weatherLocation.textContent = "Using browser location…";
+
+              fetch(`https://geocoding-api.open-meteo.com/v1/reverse?latitude=${lat}&longitude=${lon}&language=en&count=1`)
+                .then((response) => response.json())
+                .then((geoData) => {
+                  const place = geoData.results?.[0];
+                  const placeName = place?.name || place?.city || place?.town || place?.village || "Your area";
+                  weatherLocation.textContent = placeName;
+
+                  return fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code&daily=precipitation_probability_mean&temperature_unit=fahrenheit&wind_speed_unit=mph&forecast_days=1&timezone=auto`);
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                  const current = data.current;
+                  const code = current?.weather_code;
+                  const precipitation = data.daily?.precipitation_probability_mean?.[0] ?? 0;
+                  weatherTemp.textContent = `${Math.round(current?.temperature_2m ?? 0)}°F`;
+                  weatherCondition.textContent = weatherLabel[code] || "Current conditions";
+                  weatherIcon.textContent = weatherEmoji[code] || "🌦️";
+                  weatherPrecip.textContent = `Precip: ${Math.round(precipitation)}%`;
+                })
+                .catch(() => {
+                  showFallback("Location available");
+                });
+            },
+            () => {
+              showFallback("Location blocked");
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+          );
+        } else {
+          showFallback("Geolocation unavailable");
+        }
+      </script>
 
       <section id="about">
         <h2 class="section-title">About Ross</h2>
