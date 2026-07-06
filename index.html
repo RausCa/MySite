@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ross | CX Strategist</title>
+    <meta
+      name="description"
+      content="Ross is a customer experience strategist helping brands turn friction into memorable journeys."
+    />
+    <style>
+      :root {
+        --bg: #07111f;
+        --panel: rgba(255, 255, 255, 0.09);
+        --panel-strong: rgba(255, 255, 255, 0.14);
+        --text: #f4f7fb;
+        --muted: #b8c4d9;
+        --accent: #7ed6c1;
+        --accent-2: #8aa7ff;
+        --border: rgba(255, 255, 255, 0.16);
+      }
+
+      * { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+        color: var(--text);
+        background:
+          radial-gradient(circle at top left, rgba(126, 214, 193, 0.2), transparent 28%),
+          radial-gradient(circle at right, rgba(138, 167, 255, 0.22), transparent 30%),
+          var(--bg);
+        min-height: 100vh;
+      }
+
+      a { color: inherit; text-decoration: none; }
+      .wrap {
+        width: min(1120px, calc(100% - 2rem));
+        margin: 0 auto;
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 0;
+      }
+      .nav .brand {
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+      }
+      .nav .links a {
+        margin-left: 1rem;
+        color: var(--muted);
+        transition: color 180ms ease;
+      }
+      .nav .links a:hover { color: var(--text); }
+
+      .hero {
+        padding: 4rem 0 3rem;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 2rem;
+        align-items: center;
+      }
+      .eyebrow {
+        display: inline-block;
+        padding: 0.45rem 0.7rem;
+        border: 1px solid var(--border);
+        border-radius: 999px;
+        color: var(--accent);
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+        background: rgba(126, 214, 193, 0.1);
+      }
+      h1 {
+        font-size: clamp(2.4rem, 5vw, 4rem);
+        line-height: 1.04;
+        margin: 0 0 1rem;
+      }
+      .lead {
+        font-size: 1.05rem;
+        color: var(--muted);
+        line-height: 1.7;
+        max-width: 650px;
+      }
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.9rem;
+        margin-top: 1.5rem;
+      }
+      .btn {
+        padding: 0.9rem 1.2rem;
+        border-radius: 999px;
+        font-weight: 600;
+        display: inline-block;
+        border: 1px solid transparent;
+        transition: transform 180ms ease, background 180ms ease;
+      }
+      .btn:hover { transform: translateY(-2px); }
+      .btn-primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-2));
+        color: #04111c;
+      }
+      .btn-secondary {
+        border-color: var(--border);
+        background: var(--panel);
+      }
+
+      .card {
+        background: linear-gradient(145deg, rgba(255,255,255,0.14), rgba(255,255,255,0.08));
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.22);
+        border-radius: 24px;
+        padding: 1.4rem;
+        backdrop-filter: blur(16px);
+      }
+      .quote {
+        font-size: 1.1rem;
+        line-height: 1.7;
+        color: var(--text);
+      }
+      .quote strong { color: var(--accent); }
+      .mini-list {
+        margin-top: 1rem;
+        padding: 0;
+        list-style: none;
+        color: var(--muted);
+      }
+      .mini-list li { margin: 0.45rem 0; }
+      .mini-list li::before {
+        content: "•";
+        color: var(--accent);
+        margin-right: 0.55rem;
+      }
+
+      section {
+        padding: 1.4rem 0 2.4rem;
+      }
+      .section-title {
+        font-size: 1.5rem;
+        margin-bottom: 0.6rem;
+      }
+      .section-copy {
+        color: var(--muted);
+        line-height: 1.7;
+        margin-bottom: 1.15rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .feature {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 1.1rem;
+      }
+      .feature h3 { margin-top: 0; margin-bottom: 0.5rem; }
+      .feature p { color: var(--muted); line-height: 1.6; margin: 0; }
+
+      .timeline {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+      }
+      .step {
+        padding: 1rem;
+        background: var(--panel);
+        border-radius: 18px;
+        border: 1px solid var(--border);
+      }
+      .step .num {
+        color: var(--accent);
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+      }
+
+      footer {
+        padding: 2rem 0 3rem;
+        color: var(--muted);
+        text-align: center;
+      }
+
+      @media (max-width: 860px) {
+        .hero, .grid, .timeline { grid-template-columns: 1fr; }
+        .nav { flex-direction: column; gap: 0.6rem; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <nav class="nav">
+        <a class="brand" href="#top">Ross</a>
+        <div class="links">
+          <a href="#about">About</a>
+          <a href="#services">Services</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </nav>
+
+      <header class="hero" id="top">
+        <div>
+          <div class="eyebrow">CX strategist • journey design • growth</div>
+          <h1>I help brands create customer experiences that feel effortless and memorable.</h1>
+          <p class="lead">
+            I’m Ross, a strategist focused on turning customer insight into clear experiences,
+            smarter service, and measurable business growth.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#services">Explore my work</a>
+            <a class="btn btn-secondary" href="#contact">Let’s connect</a>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="quote">
+            “Great customer experience is not a touchpoint checklist. It is a deliberate system
+            shaped by empathy, clarity, and momentum.”
+          </p>
+          <ul class="mini-list">
+            <li>Customer journey mapping</li>
+            <li>Voice of customer insights</li>
+            <li>Experience strategy and service design</li>
+          </ul>
+        </div>
+      </header>
+
+      <section id="about">
+        <h2 class="section-title">About Ross</h2>
+        <p class="section-copy">
+          I bring together research, storytelling, and operational thinking to help teams design
+          experiences customers actually value. My work sits at the intersection of strategy,
+          service, and growth.
+        </p>
+        <div class="grid">
+          <div class="feature">
+            <h3>Insight-led</h3>
+            <p>Every recommendation is grounded in customer behavior, friction points, and business priorities.</p>
+          </div>
+          <div class="feature">
+            <h3>Human-centered</h3>
+            <p>I design for real people, not just funnels, so the experience feels natural and meaningful.</p>
+          </div>
+          <div class="feature">
+            <h3>Actionable</h3>
+            <p>Ideas become roadmaps, and roadmaps become measurable improvements that teams can actually execute.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="services">
+        <h2 class="section-title">What I do</h2>
+        <p class="section-copy">
+          Whether you are refining an existing experience or shaping one from the ground up, I can help you build it with intention.
+        </p>
+        <div class="grid">
+          <div class="feature">
+            <h3>Experience strategy</h3>
+            <p>Clarify the moments that matter most and align teams around a stronger customer journey.</p>
+          </div>
+          <div class="feature">
+            <h3>Service design</h3>
+            <p>Map touchpoints, remove friction, and create smoother interactions across the lifecycle.</p>
+          </div>
+          <div class="feature">
+            <h3>Growth consulting</h3>
+            <p>Turn customer understanding into practical changes that improve retention, loyalty, and value.</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="section-title">How I work</h2>
+        <div class="timeline">
+          <div class="step">
+            <div class="num">01 / Listen</div>
+            <p>Understand your customer, your team, and the friction standing between them.</p>
+          </div>
+          <div class="step">
+            <div class="num">02 / Shape</div>
+            <p>Translate insight into a compelling strategy, experience blueprint, and priorities.</p>
+          </div>
+          <div class="step">
+            <div class="num">03 / Improve</div>
+            <p>Guide the rollout so the experience evolves with clarity and measurable impact.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer id="contact">
+        <h2 class="section-title">Let’s build better experiences</h2>
+        <p class="section-copy">
+          If you are looking for thoughtful CX strategy, I would love to hear about your next challenge.
+        </p>
+        <a class="btn btn-primary" href="mailto:hello@rosscx.com">hello@rosscx.com</a>
+      </footer>
+    </div>
+  </body>
+</html>
